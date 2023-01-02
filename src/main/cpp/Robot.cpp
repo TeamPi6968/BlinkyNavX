@@ -38,7 +38,9 @@ void Robot::RobotInit()
   m_rightDrive2.Follow(m_rightDrive);
 }
 
-void Robot::RobotPeriodic() {}
+void Robot::RobotPeriodic() {
+  pinav.UpdateSmartdashboardVeriables();
+}
 
 void Robot::AutonomousInit()
 {

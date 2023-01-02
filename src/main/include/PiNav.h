@@ -14,8 +14,11 @@ class PiNav
     // Variables and methods go here
 public:
     PiNav();
-    double GetAngle();
+    double GetAngle(); //from accelerometer?
+    double GetCompassHeading(); //from compas
+    double GetFusedHeading(); // from compass and accelerometer
     void Reset();
+    void UpdateSmartdashboardVeriables()
     void DriveStraightInit();
     void DriveStraightPeriodic(DifferentialDrive *drivetrain, Joystick *stick);
 
@@ -25,4 +28,6 @@ public:
 
 private:
     AHRS *ahrs;
+    NetworkTable *table;
+    LiveWindow *lw;
 };
