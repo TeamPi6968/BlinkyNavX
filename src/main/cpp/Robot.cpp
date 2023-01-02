@@ -17,6 +17,7 @@ void Robot::RobotInit()
 
   // add pi nav x
   pinav = new PiNav();
+  pinav->Reset();
 
   // Set motor direction
   m_leftDrive.SetInverted(false);
