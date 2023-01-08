@@ -41,9 +41,9 @@ class Robot : public frc::TimedRobot {
  private:
 
   WPI_VictorSPX m_leftDrive{5};
-  WPI_VictorSPX m_leftDrive2{2};
+  WPI_TalonSRX m_leftDrive2{2};
   WPI_VictorSPX m_rightDrive{3};
-  WPI_VictorSPX m_rightDrive2{4};
+  WPI_TalonSRX m_rightDrive2{4};
 
   frc::PWMSparkMax m_leftIntake{1};
   frc::PWMSparkMax m_rightIntake{2};
