@@ -7,8 +7,6 @@
 #include <fmt/core.h>
 #include <iostream>
 
-#include <frc/smartdashboard/SmartDashboard.h>
-
 void Robot::RobotInit()
 {
 
@@ -19,11 +17,15 @@ void Robot::RobotInit()
   pinav = new PiNav();
   pinav->Reset();
 
+  // add PiVision
+  pivision = new PiVision();
+
   // Set motor direction
-  m_leftDrive.SetInverted(false);
+  m_leftDrive.SetInverted(true);
   m_leftDrive2.SetInverted(true);
   m_rightDrive.SetInverted(true);
-  m_rightDrive2.SetInverted(false);
+  m_rightDrive2.SetInverted(true);
+
   m_leftIntake.SetInverted(true);
   m_rightIntake.SetInverted(false);
   m_Storage.SetInverted(false);
@@ -37,10 +39,20 @@ void Robot::RobotInit()
   // create drivetrain
   m_leftDrive2.Follow(m_leftDrive);
   m_rightDrive2.Follow(m_rightDrive);
+
+  // // get the default instance of NetworkTables
+  // nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();
+
+  // // get the subtable called "datatable"
+  // auto datatable = inst.GetTable("DriveTrainConfig");
+
+  // // subscribe to the topic in "datatable" called "Y"
+  // TableDrivePercentage = datatable->GetDoubleTopic("DrivePercentage").Subscribe(0.8);
 }
 
-void Robot::RobotPeriodic() {
-  pinav.UpdateSmartdashboardVeriables();
+void Robot::RobotPeriodic()
+{
+  // pinav.UpdateSmartdashboardVeriables();
 }
 
 void Robot::AutonomousInit()
@@ -57,10 +69,28 @@ void Robot::TeleopInit() {}
 
 void Robot::TeleopPeriodic()
 {
-  m_robotDrive.ArcadeDrive(stick->GetY(), -stick->GetX());
-  m_leftIntake.Set(stick->GetRawAxis(3));
-  m_rightIntake.Set(stick->GetRawAxis(3));
-  m_Storage.Set(stick->GetRawAxis(3));
+
+  pivision->Update();
+
+  bool do_vision = stick->GetRawButton(3);
+  if (do_vision)
+  {
+    if (pivision->HasTarget)
+    {
+      m_robotDrive.ArcadeDrive(pivision->DriveCmd, pivision->TurnCmd);
+    }
+    else
+    {
+      m_robotDrive.ArcadeDrive(0.0, 0.0);
+    }
+  }
+  else
+  {
+    m_robotDrive.ArcadeDrive(stick->GetX() * RotatePercentage, -stick->GetY() * DrivePercentage);
+    m_leftIntake.Set(stick->GetRawAxis(3));
+    m_rightIntake.Set(stick->GetRawAxis(3));
+    m_Storage.Set(stick->GetRawAxis(3));
+  }
 }
 
 void Robot::DisabledInit()

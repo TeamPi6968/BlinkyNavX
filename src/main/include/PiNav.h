@@ -7,7 +7,12 @@
 #include <frc/drive/DifferentialDrive.h>
 #include <frc/Joystick.h.>
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 using namespace frc;
+
+//for networktables
+using namespace nt;
 
 class PiNav
 {
@@ -26,17 +31,18 @@ public:
     void Reset();
 
     //sends all the values to the driver station dashboard
-    void UpdateSmartdashboardVeriables()
+    void UpdateSmartdashboardVeriables();
 
     //2 functions to demonstartes autonomous driving straight
     void DriveStraightInit();
     void DriveStraightPeriodic(DifferentialDrive *drivetrain, Joystick *stick);
+
+
     // PID value drive straight
-    double drivepower = 0.5;
-    double kp = 0.06;
+    double kp = 0.1;
 
 private:
     AHRS *ahrs;
-    NetworkTable *table;
-    LiveWindow *lw;
+    // NetworkTable *table;
+    // LiveWindow *lw;
 };

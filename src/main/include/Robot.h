@@ -9,7 +9,7 @@
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SendableChooser.h>
 
-//motors
+// motors
 #include <ctre/Phoenix.h>
 #include <frc/motorcontrol/PWMSparkMax.h>
 #include <frc/drive/DifferentialDrive.h>
@@ -17,14 +17,25 @@
 #include <frc/Joystick.h.>
 #include <frc/DriverStation.h>
 
+#include <chrono>
+#include <thread>
+#include <fmt/format.h>
+
+#include <frc/smartdashboard/SmartDashboard.h>
+// #include <networktables/DoubleTopic.h>
+// #include <networktables/NetworkTable.h>
+// #include <networktables/NetworkTableInstance.h>
+
 #include <frc\Errors.h>
 
 #include "PiNav.h"
+#include "PiVision.h"
 
 using namespace frc;
 
-class Robot : public frc::TimedRobot {
- public:
+class Robot : public frc::TimedRobot
+{
+public:
   void RobotInit() override;
   void RobotPeriodic() override;
   void AutonomousInit() override;
@@ -38,8 +49,7 @@ class Robot : public frc::TimedRobot {
   void SimulationInit() override;
   void SimulationPeriodic() override;
 
- private:
-
+private:
   WPI_VictorSPX m_leftDrive{5};
   WPI_TalonSRX m_leftDrive2{2};
   WPI_VictorSPX m_rightDrive{3};
@@ -53,7 +63,10 @@ class Robot : public frc::TimedRobot {
 
   const static int joystickChannel = 0;
 
-  Joystick *stick;          // only joystick
+  double DrivePercentage = 0.8;
+  double RotatePercentage = 0.8;
 
+  Joystick *stick; // only joystick
   PiNav *pinav;
+  PiVision *pivision;
 };
