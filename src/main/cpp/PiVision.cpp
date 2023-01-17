@@ -3,6 +3,14 @@
 PiVision::PiVision()
 {
     std::cout << "PiVision created \n";
+    // Creates UsbCamera and MjpegServer [1] and connects them
+    frc::CameraServer::StartAutomaticCapture();
+
+    // // Creates the CvSink and connects it to the UsbCamera
+    // cs::CvSink cvSink = frc::CameraServer::GetVideo();
+
+    // // Creates the CvSource and MjpegServer [2] and connects them
+    // cs::CvSource outputStream = frc::CameraServer::PutVideo("Blur", 640, 480);
 }
 
 double clamp(double in, double minval, double maxval)
@@ -28,7 +36,7 @@ void PiVision::Update()
     const double DESIRED_TARGET_AREA = 1000.0;
     const double MAX_DRIVE = 0.65;
     const double MAX_STEER = 1.0f;
-    
+
     std::shared_ptr<NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("PiVision");
     double tx = table->GetNumber("Apriltag/cX", 0.0);
     double ty = table->GetNumber("Apriltag/cY", 0.0);
@@ -37,21 +45,20 @@ void PiVision::Update()
 
     if (tv < 1.0)
     {
-            HasTarget = false;
-            DriveCmd = 0.0;
-            TurnCmd = 0.0;
+        HasTarget = false;
+        DriveCmd = 0.0;
+        TurnCmd = 0.0;
     }
     else
     {
-            HasTarget = true;
+        HasTarget = true;
 
-            // Proportional steering
-            TurnCmd = tx * STEER_K;
-            TurnCmd = clamp(TurnCmd, -MAX_STEER, MAX_STEER);
+        // Proportional steering
+        TurnCmd = tx * STEER_K;
+        TurnCmd = clamp(TurnCmd, -MAX_STEER, MAX_STEER);
 
-            // drive forward until the target area reaches our desired area
-            DriveCmd = (DESIRED_TARGET_AREA - ta) * DRIVE_K;
-            DriveCmd = clamp(DriveCmd, -MAX_DRIVE, MAX_DRIVE);
+        // drive forward until the target area reaches our desired area
+        DriveCmd = (DESIRED_TARGET_AREA - ta) * DRIVE_K;
+        DriveCmd = clamp(DriveCmd, -MAX_DRIVE, MAX_DRIVE);
     }
 }
-
