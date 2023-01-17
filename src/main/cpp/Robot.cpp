@@ -77,7 +77,8 @@ void Robot::TeleopPeriodic()
   {
     if (pivision->HasTarget)
     {
-      m_robotDrive.ArcadeDrive(pivision->DriveCmd, pivision->TurnCmd);
+      m_robotDrive.ArcadeDrive(pivision->TurnCmd, pivision->DriveCmd);
+      // m_robotDrive.ArcadeDrive(0, pivision->DriveCmd);
     }
     else
     {
@@ -87,9 +88,10 @@ void Robot::TeleopPeriodic()
   else
   {
     m_robotDrive.ArcadeDrive(stick->GetX() * RotatePercentage, -stick->GetY() * DrivePercentage);
-    m_leftIntake.Set(stick->GetRawAxis(3));
-    m_rightIntake.Set(stick->GetRawAxis(3));
-    m_Storage.Set(stick->GetRawAxis(3));
+
+    m_leftIntake.Set(stick->GetRawAxis(5));
+    m_rightIntake.Set(stick->GetRawAxis(5));
+    m_Storage.Set(stick->GetRawAxis(5));
   }
 }
 
