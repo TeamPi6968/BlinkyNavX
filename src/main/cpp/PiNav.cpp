@@ -60,6 +60,21 @@ double PiNav::GetAngle()
     return 0;
 }
 
+double PiNav::GetAngleYaw()
+{
+    try
+    {
+        return ahrs->GetYaw();
+    }
+    catch (std::exception &ex)
+    {
+        std::string err_string = "Error communicating with Drive System:  ";
+        err_string += ex.what();
+        std::cout << err_string.c_str() << "\n";
+    }
+    return 0;
+}
+
 double PiNav::GetCompassHeading()
 {
     // check if sensor is connected
